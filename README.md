@@ -3,6 +3,8 @@ Cube is an advanced general purpose substitution stream cipher.
 
 No attack of any kind has been proposed against Cube.  Cube passes NIST and DieHarder statistical tests.
 
+Binaries are available for the various tools built around Cube.  Run the binary and check the usage.
+
 
 # Usage:  
 Cube cube;
