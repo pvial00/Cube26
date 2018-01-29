@@ -1,0 +1,2 @@
+rm cube26sum
+g++ cube26sum.cpp -std=c++11 -o cube26sum
