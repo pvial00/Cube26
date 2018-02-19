@@ -5,6 +5,7 @@
 #include <utility>
 #include <algorithm>
 #include <map>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -242,23 +243,25 @@ class CubeKDF {
 class CubeRandom {
     public:
     string random (int length) {
-	int seedlength = 16;
-        char aseed[seedlength];
-        string iv, bytes, seed;
+	int seedlength = 128;
+	int noncelength = 16;
+        string iv, bytes, seed, nonce;
         int x, s;
         for (x = 0; x < length; x++) {
             iv.push_back(char(65));
         }
         ifstream urandom("/dev/urandom", ios::in|ios::binary);
-        urandom.read(aseed, seedlength);
-        urandom.close();
-        string tmp(aseed);
-        for (x = 0; x < seedlength; x++) {
-            s = tmp[x] % (90 - 65 + 1) + 65;
-            seed.push_back(char(s));
-        }
+	for (x = 0; x < seedlength; x++) {
+	    s = arc4random_uniform(26);
+	    seed.push_back(char(s + 65));
+	}
+	for (x = 0; x < noncelength; x++) {
+	    s = arc4random_uniform(26);
+	    nonce.push_back(char(s + 65));
+	}
+	
 	Cube cube;
-        bytes = cube.encrypt(iv, seed);
+        bytes = cube.encrypt(iv, seed, nonce);
         return bytes;
     }
 };
