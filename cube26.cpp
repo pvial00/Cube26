@@ -244,8 +244,7 @@ class CubeRandom {
     public:
     string random (int length) {
 	int seedlength = 128;
-	int noncelength = 16;
-        string iv, bytes, seed, nonce;
+        string iv, bytes, seed;
         int x, s;
         for (x = 0; x < length; x++) {
             iv.push_back(char(65));
@@ -255,13 +254,9 @@ class CubeRandom {
 	    s = arc4random_uniform(26);
 	    seed.push_back(char(s + 65));
 	}
-	for (x = 0; x < noncelength; x++) {
-	    s = arc4random_uniform(26);
-	    nonce.push_back(char(s + 65));
-	}
 	
 	Cube cube;
-        bytes = cube.encrypt(iv, seed, nonce);
+        bytes = cube.encrypt(iv, seed);
         return bytes;
     }
 };
