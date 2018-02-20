@@ -196,30 +196,18 @@ class Cube {
     }
 };
 
-class CubeH {
+class CubeSum {
     public:
     string digest (string data, string key = string(), int length = 32) {
         string d;
         int x;
         string iv;
-        if (key.empty() == true) {
-            for (x = 0; x < length; x++) {
-                key.push_back(char(65));
-            }   
-        }
+        for (x = 0; x < length; x++) {
+            iv.push_back(char(65));
+        }   
         Cube cube;
-        d = cube.encrypt(key, data, key);
+        d = cube.encrypt(iv, data+key, iv);
         return d;
-    }
-};
-
-class CubeMAC {
-    public:
-    string mac (string data, string key, int length) {
-        string m;
-	CubeH hash;
-	m = hash.digest(data, key, length);
-	return m;
     }
 };
 
@@ -230,7 +218,7 @@ class CubeKDF {
         int x;
         string iv;
         string h;
-        CubeH hash;
+        CubeSum hash;
         h = key;
 	key = hash.digest(key, string(), length);
         for (x = 0; x < iterations; x++) {
@@ -261,3 +249,18 @@ class CubeRandom {
     }
 };
 
+class CubeMAC {
+    public:
+    string mac (string data, string key, int length) {
+        string m, m2, k1, k2;
+	int iterations = 10;
+	int keylen = 128;
+	CubeSum hash;
+	CubeKDF kdf;
+	k1 = kdf.genkey(key, keylen, iterations);
+	k2 = kdf.genkey(k1, keylen, iterations);
+	m = hash.digest(data, k1, length);
+	m2 = hash.digest(m, k2, length);
+	return m2;
+    }
+};

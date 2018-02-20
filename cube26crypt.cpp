@@ -4,10 +4,10 @@
 #include <fstream>
 #include <utility>
 #include <algorithm>
-#include "cube26.h"
+#include "cube26.cpp"
 
-int iterations = 10;
-int keylen = 64;
+int iterations = 69;
+int keylen = 128;
 int nonce_length = 16;
 int mac_length = 16;
 
@@ -20,7 +20,7 @@ void usage() {
 int main(int argc, char** argv) {
     ifstream infile;
     ofstream outfile;
-    string mode, in, out, key, msg, nonce, data, mac, m;
+    string mode, in, out, key, msg, nonce, data, mac;
     unsigned char b;
     int i;
     if (argc < 5) {
@@ -48,23 +48,34 @@ int main(int argc, char** argv) {
     CubeKDF kdf;
     key = kdf.genkey(key, keylen, iterations);
     Cube cube;
+    CubeMAC cubemac;
     if (mode == "encrypt") {
 	CubeRandom rand;
 	nonce = rand.random(nonce_length);
     	data = cube.encrypt(data, key, nonce);
+	mac = cubemac.mac(data, key, mac_length);
+	cout << mac.length() << "\n";
         outfile.open(out.c_str());
-        outfile << nonce;
-        outfile << data;
+	outfile << mac+nonce+data;
 	outfile.close();
     }
     else if (mode == "decrypt") {
-        nonce = data.substr(0, nonce_length);
-        msg = data.substr(nonce_length, (data.length() - (nonce_length)));
+	string m;
+	mac = data.substr(0, mac_length);
+        nonce = data.substr(mac_length, nonce_length);
+        msg = data.substr(mac_length+nonce_length, (data.length() - (mac_length + nonce_length)));
         data.clear();
-	msg = cube.decrypt(msg, key, nonce);
-        outfile.open(out.c_str());
-        outfile << msg;
-        outfile.close();
+	m = cubemac.mac(msg, key, mac_length);
+	if (m.compare(mac) == 0) {
+	    msg = cube.decrypt(msg, key, nonce);
+            outfile.open(out.c_str());
+            outfile << msg;
+            outfile.close();
+	}
+	else {
+	    cout << "MAC failed: message has been tampered with.\n";
+	    exit(1);
+	}
     }
     return 0;
 }
