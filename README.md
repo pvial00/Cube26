@@ -3,7 +3,7 @@
  only and should not be used to actually provide good security  
 Cube is an advanced general purpose substitution stream cipher.
 
-No attack of any kind has been proposed against Cube.  Cube passes NIST and DieHarder statistical tests.
+Cube passes NIST and DieHarder statistical tests.  The recommended key length for Cube26 is 128 letters.
 
 Binaries are available for the various tools built around Cube.  Run the binary and check the usage.
 
