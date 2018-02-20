@@ -33,3 +33,11 @@ kdf.genkey(key, keylen_in_bytes, iterations);
 CubeRandom rand;  
 
 rand.random(num_of_bytes);  
+
+# File encryption binary usage
+
+cube26 <encrypt/decrypt> <input file> <output file> <password>   
+
+# Interactive encryption binary usage  
+
+cube26i <encrypt/decrypt>   
