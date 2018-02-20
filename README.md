@@ -7,6 +7,8 @@ No attack of any kind has been proposed against Cube.  Cube passes NIST and DieH
 
 Binaries are available for the various tools built around Cube.  Run the binary and check the usage.
 
+*** Linux requires libbsd-dev to be installed  
+
 
 # Usage:  
 Cube cube;
