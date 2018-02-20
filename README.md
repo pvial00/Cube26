@@ -9,6 +9,8 @@ Binaries are available for the various tools built around Cube.  Run the binary 
 
 *** Linux requires libbsd-dev to be installed  
 
+The cube26 binary utilizes CubeMAC and is authenticated.  
+
 
 # Usage:  
 Cube cube;
@@ -17,8 +19,8 @@ cube.encrypt(data, key, nonce);
 
 cube.decrypt(data, key, nonce);  
 
-# CubeH (Slow hash function)  
-CubeH hash;  
+# CubeSum (Slow hash function)  
+CubeSum hash;  
 
 hash.digest(data, optionalkey, length_in_bits);  
 
